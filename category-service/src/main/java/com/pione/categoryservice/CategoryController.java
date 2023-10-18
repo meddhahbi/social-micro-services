@@ -2,6 +2,7 @@ package com.pione.categoryservice;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,18 +10,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/v1/categories")
-@RequiredArgsConstructor
 public class CategoryController {
 
 
+    @Autowired
     private CategoryService service;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody Category category){
+    public ResponseEntity<String> save(@RequestBody Category category){
         service.saveCategory(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Category saved successfully!");
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String>deleteCategory(@PathVariable Integer id){
+        service.deleteCategory(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Category deleted successfully!");
     }
 
 
