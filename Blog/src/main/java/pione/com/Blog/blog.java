@@ -20,6 +20,7 @@ public class blog {
     private String description;
     private String auteur;
     private Integer categoryId;
+    private Integer userId;
 
 
 }
