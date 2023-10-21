@@ -19,4 +19,5 @@ public class Comment {
     private String content;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
+    private Integer blogId;
 }
