@@ -56,4 +56,17 @@ public class blogController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+
+
+    @GetMapping("/category/{category-id}")
+    public ResponseEntity<List<blog>>findAllBlogs(
+            @PathVariable("category-id") Integer categoryId
+    ){
+        return ResponseEntity.ok(service.findAllBlogsByCategory(categoryId));
+    }
+
+
+
 }
