@@ -30,4 +30,8 @@ public class blogService {
     public blog updateBlog(blog blog) {
         return repository.save(blog);
     }
+
+    public List<blog> findAllBlogsByCategory(Integer categoryId) {
+        return repository.findAllByCategoryId(categoryId);
+    }
 }

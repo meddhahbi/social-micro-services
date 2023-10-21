@@ -39,4 +39,15 @@ public class CategoryController {
         return ResponseEntity.ok(service.findAllCategory());
     }
 
+
+    @GetMapping("/with-posts/{category-id}")
+    public ResponseEntity<FullCategoryResponse> findCategories(
+            @PathVariable("category-id") Integer categoryId){
+
+        return ResponseEntity.ok(service.findCategoriesWithBlogs(categoryId));
+    }
+
+
+
+
 }
