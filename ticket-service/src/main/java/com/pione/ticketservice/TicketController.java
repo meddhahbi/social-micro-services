@@ -58,4 +58,26 @@ public class TicketController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/event/{event-id}")
+    public ResponseEntity<List<Ticket>>findAllTickets(
+            @PathVariable("event-id") long eventId
+    ){
+        return ResponseEntity.ok(service.findAllTicketsByEvent(eventId));
+    }
+
+
+    @PostMapping("/{ticket-id}/assign/{event-id}")
+    public ResponseEntity<Ticket> assignEventToTicket(
+            @PathVariable("ticket-id") Integer ticketId,
+            @PathVariable("event-id") Long eventId
+    ) {
+        Ticket assignedTicket = service.assignEventToTicket(ticketId, eventId);
+
+        if (assignedTicket != null) {
+            return ResponseEntity.ok(assignedTicket);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
