@@ -37,4 +37,24 @@ public class CommentController {
     public ResponseEntity<List<Comment>> findAllCategories(){
         return ResponseEntity.ok(service.findAllComment());
     }
+
+    @PostMapping("/create/{blogId}/{userId}")
+    public Comment createComment(
+            @PathVariable Integer blogId,
+            @PathVariable Integer userId,
+            @RequestBody CommentRequest commentRequest
+    ) {
+        return service.createComment(
+                commentRequest.getContent(),
+                blogId,
+                userId
+        );
+    }
+
+    @GetMapping("/blog/{comment-id}")
+    public ResponseEntity<List<Comment>>findAllBlogs(
+            @PathVariable("comment-id") Integer categoryId
+    ){
+        return ResponseEntity.ok(service.findAllCommentsByBlog(categoryId));
+    }
 }
