@@ -29,5 +29,22 @@ public class TicketService {
         return repository.findById(id).orElse(null);
     }
 
+    public List<Ticket> findAllTicketsByEvent(long eventId) {
+        return repository.findAllByEventId(eventId);
+    }
+
+    public Ticket assignEventToTicket(Integer ticketId, Long eventId) {
+        Ticket ticket = repository.findById(ticketId).orElse(null);
+
+        if (ticket != null) {
+            // Assurez-vous que la logique d'attribution de l'événement au ticket est correcte.
+            ticket.setEventId(eventId);
+            repository.save(ticket);
+            return ticket;
+        }
+
+        return null;
+    }
+
 
 }
