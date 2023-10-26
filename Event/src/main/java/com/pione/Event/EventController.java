@@ -3,6 +3,7 @@ package com.pione.Event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,4 +43,24 @@ public class EventController {
     public void deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
     }
+
+    @GetMapping("/{eventId}/tickets")
+    public ResponseEntity<EventTicket> getEventWithTickets(@PathVariable Long eventId) {
+        EventTicket eventTicket = eventService.getEventWithTickets(eventId);
+
+        if (eventTicket != null) {
+            return ResponseEntity.ok(eventTicket);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("/tikcet/{event-id}")
+    public ResponseEntity<EventTicket> getEventById(
+            @PathVariable("event-id") long eventId){
+
+        return ResponseEntity.ok(eventService.getEventWithTickets(eventId));
+    }
+
 }

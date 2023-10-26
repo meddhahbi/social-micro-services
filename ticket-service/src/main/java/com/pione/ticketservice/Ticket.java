@@ -19,7 +19,7 @@ public class Ticket {
     @Id
     @GeneratedValue
     private Integer id;
-    private Integer eventId;
+    private long eventId;
     private float price;
     private boolean status;
     private String type;
