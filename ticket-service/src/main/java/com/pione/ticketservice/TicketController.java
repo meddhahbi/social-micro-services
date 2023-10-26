@@ -7,7 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/v1/tickets")
@@ -17,7 +24,25 @@ public class TicketController {
     @Autowired
     private TicketService service;
 
+    private final PDFGeneratorService pdfGeneratorService;
 
+    public TicketController(PDFGeneratorService pdfGeneratorService) {
+        this.pdfGeneratorService = pdfGeneratorService;
+    }
+
+    @GetMapping("/pdf/generate/{ticketId}")
+    public void generatePDF(HttpServletResponse response,@PathVariable Integer ticketId) throws IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+        FullTicketResponse ticket = service.findTicketWithEventById(ticketId);
+
+        this.pdfGeneratorService.export(response,ticket);
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> save(@RequestBody Ticket ticket){
@@ -36,6 +61,10 @@ public class TicketController {
     @GetMapping
     public ResponseEntity<List<Ticket>> findAllTickets(){
         return ResponseEntity.ok(service.findAllTickets());
+    }
+    @GetMapping("/events")
+    public ResponseEntity<List<Event>> findAllTEvents(){
+        return ResponseEntity.ok(service.findAllEvents());
     }
 
     @GetMapping("/{id}")
@@ -58,6 +87,28 @@ public class TicketController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/allWithEvents")
+    public ResponseEntity<List<FullTicketResponse>> findAllTicketsWithEvents() {
+        List<FullTicketResponse> responses = service.findAllTicketsWithEvents();
+        return ResponseEntity.ok(responses);
+    }
+    @GetMapping("/myTickets/{userId}")
+    public ResponseEntity<List<FullTicketResponse>> findAllMyTickets(@PathVariable Integer userId) {
+        List<FullTicketResponse> responses = service.findAllMyTickets(userId);
+        return ResponseEntity.ok(responses);
+    }
+
+    // Define a new endpoint for ticket participation
+    @PostMapping("/{ticketId}/participate/{userId}")
+    public ResponseEntity<String> participate(
+            @PathVariable Integer ticketId,
+            @PathVariable Integer userId
+    ) {
+        service.participate(ticketId, userId);
+        return ResponseEntity.ok("User participated in the event.");
+    }
+
+
     @GetMapping("/event/{event-id}")
     public ResponseEntity<List<Ticket>>findAllTickets(
             @PathVariable("event-id") long eventId
