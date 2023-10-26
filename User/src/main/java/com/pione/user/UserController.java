@@ -37,9 +37,9 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> save(@RequestBody Userr userr){
-
-        if(service.findUserByEmail(userr.getEmail())==null){
+    public ResponseEntity<Userr> save(@RequestBody Userr userr){
+    Userr userExisted=service.findUserByEmail(userr.getEmail());
+        if(userExisted==null){
         userr.setRole("user");
         userr.setRawPassword(userr.getPassword());
         userr.setVerified(false);
@@ -50,7 +50,7 @@ public class UserController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userr.setPassword(passwordEncoder.encode(userr.getRawPassword()));
 
-        service.saveUser(userr);
+        Userr addedUser= service.saveUser(userr);
 
 
             ConfirmationToken confirmationToken = new ConfirmationToken(userr);
@@ -71,10 +71,10 @@ public class UserController {
 
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("User saved successfully!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
         }
         else
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exist!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userExisted);
 
     }
 
@@ -106,16 +106,15 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Userr loginRequest) {
+    public ResponseEntity<Userr> login(@RequestBody Userr loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
-
-        if (service.authenticateUser(email, password)) {
+         if (service.authenticateUser(email, password)) {
             // Password is correct, user is authenticated
-            return ResponseEntity.ok("Login successful!");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body( userRepository.findByEmail(email));
         } else {
             // Password is incorrect, authentication failed
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 

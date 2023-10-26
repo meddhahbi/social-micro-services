@@ -29,8 +29,8 @@ public class UserService {
 
         return false;
     }
-    public void saveUser(Userr userr){
-        repository.save(userr);
+    public Userr saveUser(Userr userr){
+        return repository.save(userr);
     }
 
     public List<Userr> findAllUser(){
