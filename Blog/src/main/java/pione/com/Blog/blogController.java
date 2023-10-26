@@ -48,6 +48,8 @@ public class blogController {
             existingBlog.setTitre(updatedBlog.getTitre());
             existingBlog.setDescription(updatedBlog.getAuteur());
             existingBlog.setAuteur(updatedBlog.getAuteur());
+            existingBlog.setCategoryId(updatedBlog.getCategoryId());
+            existingBlog.setUserId(updatedBlog.getUserId());
 
             blog updated = service.updateBlog(existingBlog);
 
@@ -57,5 +59,19 @@ public class blogController {
         }
     }
 
-    // test somme issues
+
+
+
+    @GetMapping("/category/{category-id}")
+    public ResponseEntity<List<blog>>findAllBlogs(
+            @PathVariable("category-id") Integer categoryId
+    ){
+        return ResponseEntity.ok(service.findAllBlogsByCategory(categoryId));
+    }
+
+
+
+
+
+
 }
