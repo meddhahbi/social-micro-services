@@ -93,12 +93,12 @@ public class UserController {
         }
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTicket(@PathVariable Integer id, @RequestBody Userr updatedUser) {
+    public ResponseEntity<Userr> updateTicket(@PathVariable Integer id, @RequestBody Userr updatedUser) {
         Userr existingUser = service.findUserrById(id);
         if (existingUser != null) {
             updatedUser.setId(id); // Make sure the ID matches
-            service.saveUser(updatedUser);
-            return ResponseEntity.ok("Ticket with ID " + id + " updated successfully!");
+           Userr updatedUserr= service.saveUser(updatedUser);
+            return ResponseEntity.ok(updatedUserr);
         } else {
             return ResponseEntity.notFound().build();
         }
