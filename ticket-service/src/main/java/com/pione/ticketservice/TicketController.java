@@ -1,5 +1,6 @@
 package com.pione.ticketservice;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,5 +108,27 @@ public class TicketController {
         return ResponseEntity.ok("User participated in the event.");
     }
 
+
+    @GetMapping("/event/{event-id}")
+    public ResponseEntity<List<Ticket>>findAllTickets(
+            @PathVariable("event-id") long eventId
+    ){
+        return ResponseEntity.ok(service.findAllTicketsByEvent(eventId));
+    }
+
+
+    @PostMapping("/{ticket-id}/assign/{event-id}")
+    public ResponseEntity<Ticket> assignEventToTicket(
+            @PathVariable("ticket-id") Integer ticketId,
+            @PathVariable("event-id") Long eventId
+    ) {
+        Ticket assignedTicket = service.assignEventToTicket(ticketId, eventId);
+
+        if (assignedTicket != null) {
+            return ResponseEntity.ok(assignedTicket);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

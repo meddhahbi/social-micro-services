@@ -19,12 +19,25 @@ public class CommentService {
         repository.save(comment);
     }
 
+    public Comment createComment(String content, Integer blogId, Integer userId) {
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setCreated(new Date()); // Automatically set the creation timestamp
+        comment.setBlogId(blogId);
+        comment.setUserId(userId);
+        return repository.save(comment);
+    }
+
     public List<Comment> findAllComment(){
         return repository.findAll();
     }
 
     public void deleteComment(Integer id) {
         repository.deleteById(id);
+    }
+
+    public List<Comment> findAllCommentsByBlog(Integer commentId) {
+        return repository.findAllByBlogId(commentId);
     }
 
 

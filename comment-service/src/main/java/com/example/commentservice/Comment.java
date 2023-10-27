@@ -20,4 +20,5 @@ public class Comment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     private Integer blogId;
+    private Integer userId;
 }

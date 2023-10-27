@@ -1,4 +1,5 @@
 package com.pione.Event;
+
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -23,7 +24,6 @@ public class Event {
     private Integer userId;
     private String place;
 
-
-
-
+    // Additional fields and methods can be added here
+    // For example, you can add getters and setters for the new fields.
 }

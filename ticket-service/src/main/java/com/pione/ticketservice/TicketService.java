@@ -1,13 +1,10 @@
 package com.pione.ticketservice;
 
-import com.pione.ticketservice.Client.EventClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
@@ -24,11 +21,7 @@ public class TicketService {
     public List<Ticket> findAllTickets(){
         return repository.findAll();
     }
-    public List<Event> findAllEvents(){
-        return client.getAllEvents();
-    }
-    @Autowired
-    private EventClient client;
+
     public void deleteTicket(Integer id) {
         repository.deleteById(id);
     }
@@ -147,6 +140,23 @@ public List<FullTicketResponse> findAllTicketsWithEvents() {
         }
 
         return null; // Ticket or event not found
+    }
+
+    public List<Ticket> findAllTicketsByEvent(long eventId) {
+        return repository.findAllByEventId(eventId);
+    }
+
+    public Ticket assignEventToTicket(Integer ticketId, Long eventId) {
+        Ticket ticket = repository.findById(ticketId).orElse(null);
+
+        if (ticket != null) {
+            // Assurez-vous que la logique d'attribution de l'événement au ticket est correcte.
+            ticket.setEventId(eventId);
+            repository.save(ticket);
+            return ticket;
+        }
+
+        return null;
     }
 
 
