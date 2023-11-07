@@ -27,6 +27,7 @@ public class Userr {
     private String role;
     private boolean isVerified;
     private String password;
+    private Integer blogId;
 
     @Transient
     private String rawPassword;

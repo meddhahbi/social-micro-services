@@ -48,6 +48,8 @@ public class blogController {
             existingBlog.setTitre(updatedBlog.getTitre());
             existingBlog.setDescription(updatedBlog.getAuteur());
             existingBlog.setAuteur(updatedBlog.getAuteur());
+            existingBlog.setUserId(updatedBlog.getUserId());
+            existingBlog.setCategoryId(updatedBlog.getUserId());
 
             blog updated = service.updateBlog(existingBlog);
 

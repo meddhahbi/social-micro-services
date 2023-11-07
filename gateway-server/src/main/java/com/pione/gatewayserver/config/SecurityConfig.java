@@ -18,7 +18,8 @@ public class SecurityConfig {
         return serverHttpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange->exchange.pathMatchers("/eureka/**")
                         .permitAll()
-                        .pathMatchers("/api/v1/categories").hasRole("admin")
+                        /*.pathMatchers("/api/v1/categories").hasRole("")
+                        .pathMatchers("/api/blog").hasRole("")*/
                         .anyExchange().authenticated()
                 ).oauth2ResourceServer((oauth)->oauth.jwt(Customizer.withDefaults())).build();
     }

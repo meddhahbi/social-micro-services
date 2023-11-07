@@ -111,7 +111,7 @@ public class TicketController {
 
     @GetMapping("/event/{event-id}")
     public ResponseEntity<List<Ticket>>findAllTickets(
-            @PathVariable("event-id") long eventId
+            @PathVariable("event-id") Integer eventId
     ){
         return ResponseEntity.ok(service.findAllTicketsByEvent(eventId));
     }
@@ -120,7 +120,7 @@ public class TicketController {
     @PostMapping("/{ticket-id}/assign/{event-id}")
     public ResponseEntity<Ticket> assignEventToTicket(
             @PathVariable("ticket-id") Integer ticketId,
-            @PathVariable("event-id") Long eventId
+            @PathVariable("event-id") Integer eventId
     ) {
         Ticket assignedTicket = service.assignEventToTicket(ticketId, eventId);
 

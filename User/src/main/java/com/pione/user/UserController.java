@@ -155,7 +155,12 @@ public class UserController {
 
 }
 
-
+    @GetMapping("/blog/{blog-id}")
+    public ResponseEntity<List<Userr>>findAllUsers(
+            @PathVariable("blog-id") Integer blogId
+    ){
+        return ResponseEntity.ok(service.findAllUsersByBlog(blogId));
+    }
 
 }
 

@@ -48,5 +48,7 @@ public class UserService {
     public Userr findUserByEmail(String email) {
         return repository.findByEmail(email);
     }
-
+    public List<Userr> findAllUsersByBlog(Integer blogId) {
+        return repository.findAllByBlogId(blogId);
+    }
 }

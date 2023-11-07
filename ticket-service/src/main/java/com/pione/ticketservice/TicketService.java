@@ -1,10 +1,13 @@
 package com.pione.ticketservice;
 
 
+import com.pione.ticketservice.Client.EventClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
@@ -12,6 +15,12 @@ public class TicketService {
 
     @Autowired
     private TicketRepository repository;
+
+    @Autowired
+    private EventClient client;
+
+
+
 
 
     public void saveTicket(Ticket ticket){
@@ -29,7 +38,7 @@ public class TicketService {
         return repository.findById(id).orElse(null);
     }
 
-//    public FullTicketResponse findTicketsWithEvents(Integer eventId) {
+    //    public FullTicketResponse findTicketsWithEvents(Integer eventId) {
 //        Event event = client.getEventById(eventId); // Use the EventClient to retrieve the event by ID
 //
 //        if (event != null) {
@@ -51,25 +60,25 @@ public class TicketService {
 //            return null;
 //        }
 //    }
-public List<FullTicketResponse> findAllTicketsWithEvents() {
-    List<Ticket> tickets = repository.findAll();
-    List<FullTicketResponse> responses = new ArrayList<>();
+    public List<FullTicketResponse> findAllTicketsWithEvents() {
+        List<Ticket> tickets = repository.findAll();
+        List<FullTicketResponse> responses = new ArrayList<>();
 
-    for (Ticket ticket : tickets) {
-        Integer eventId = ticket.getEventId(); // Assuming eventId is a field in the Ticket entity
+        for (Ticket ticket : tickets) {
+            Integer eventId = ticket.getEventId(); // Assuming eventId is a field in the Ticket entity
 
-        Event event = client.getEventById(eventId);
+            Event event = client.getEventById(eventId);
 
-        if (event != null) {
-            responses.add(FullTicketResponse.builder()
-                    .ticket(ticket)
-                    .event(event)
-                    .build());
+            if (event != null) {
+                responses.add(FullTicketResponse.builder()
+                        .ticket(ticket)
+                        .event(event)
+                        .build());
+            }
         }
-    }
 
-    return responses;
-}
+        return responses;
+    }
     public List<Ticket> findTicketsByUserId(Integer userId) {
         // Retrieve all tickets from the repository
         List<Ticket> allTickets = repository.findAll();
@@ -142,11 +151,11 @@ public List<FullTicketResponse> findAllTicketsWithEvents() {
         return null; // Ticket or event not found
     }
 
-    public List<Ticket> findAllTicketsByEvent(long eventId) {
+    public List<Ticket> findAllTicketsByEvent(Integer eventId) {
         return repository.findAllByEventId(eventId);
     }
 
-    public Ticket assignEventToTicket(Integer ticketId, Long eventId) {
+    public Ticket assignEventToTicket(Integer ticketId, Integer eventId) {
         Ticket ticket = repository.findById(ticketId).orElse(null);
 
         if (ticket != null) {
@@ -158,6 +167,11 @@ public List<FullTicketResponse> findAllTicketsWithEvents() {
 
         return null;
     }
+    public List<Event> findAllEvents(){
+        return client.getAllEvents();
+    }
+
+
 
 
 }
